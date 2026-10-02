@@ -117,8 +117,10 @@ class Category3Tests(unittest.TestCase):
         from voice_agent.http_server import calls, process_request
         calls.clear()
         process_request("/voice/start", {"CallSid": ["q1-browser"]})
-        process_request("/voice/turn", {"CallSid": ["q1-browser"], "Speech": ["Madhura stationery"]})
-        process_request("/voice/turn", {"CallSid": ["q1-browser"], "Speech": ["Stationery shop"]})
+        _, state = process_request("/voice/turn", {"CallSid": ["q1-browser"], "Speech": ["Madhura stationery"]})
+        self.assertEqual(state.business_details["business_name"], "Madhura stationery")
+        _, state = process_request("/voice/turn", {"CallSid": ["q1-browser"], "Speech": ["Stationery shop"]})
+        self.assertEqual(state.business_details["business_type"], "stationery shop")
         response, state = process_request("/voice/turn", {"CallSid": ["q1-browser"], "Speech": ["To grow my business"]})
         self.assertEqual(state.loan_requirement["loan_purpose"], "expansion")
         self.assertNotIn("funding for", response)

@@ -47,7 +47,8 @@ def extract_values(text: str, requested_field: str | None = None) -> dict[str, A
         if not any(w.casefold() in {"what", "how", "why", "when", "where", "documents", "required", "need", "loan", "business", "run", "want", "looking"} for w in words) and cleaned.casefold() not in {"yes", "no", "okay", "thanks", "retail", "equipment"}:
             out["full_name"] = cleaned
     if requested_field == "business_name" and not out and 1 <= len(words) <= 6 and all(re.fullmatch(r"[A-Za-z0-9&'-]+", w) for w in words):
-        out["business_name"] = cleaned
+        if not any(w.casefold() in {"what", "how", "why", "when", "where", "documents", "required", "need", "loan", "business", "run", "want", "looking"} for w in words):
+            out["business_name"] = cleaned
     if requested_field == "business_type" and not out and len(words) <= 3 and re.fullmatch(r"[A-Za-z -]+", cleaned):
         out["business_type"] = cleaned.casefold().removesuffix(" business").strip()
     purpose_terms = load_rules()["loan_purpose_terms"]
