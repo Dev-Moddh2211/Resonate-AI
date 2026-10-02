@@ -1,0 +1,18 @@
+version: 1
+post_escalation: [mark_escalated, preserve_context, generate_handoff_summary, offer_transfer_or_callback]
+triggers:
+  - id: human_requested
+    when: customer_explicitly_requests_human
+  - id: unsupported_question
+    when: no_trusted_knowledge_base_result
+  - id: low_confidence
+    when: retrieval_confidence_below_threshold
+  - id: unresolved_conflict
+    when: important_conflict_survives_clarification
+  - id: repeated_clarification_failure
+    when: clarification_attempts_exceed_limit
+  - id: system_failure
+    when: dependency_fails
+  - id: unauthorized_decision
+    when: request_requires_approval_underwriting_or_advice
+handoff_summary: [customer_goal, collected_fields, unanswered_question, conflict_or_error, requested_next_step]

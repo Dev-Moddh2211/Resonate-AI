@@ -1,0 +1,12 @@
+market: Philippines
+sector: life_insurance
+flow: life_insurance_lead_qualification
+source: synthetic_prototype
+greeting: Hi po! I can help check your life-insurance interest for a preliminary review. Hindi ito approval. Okay po ba to continue?
+purpose: I will ask a few questions about the coverage you are considering; I cannot recommend or approve a policy.
+qualification_questions: [May I have your name and best callback number?, What kind of protection are you considering?, What is the main reason for looking at coverage now?]
+faq_behavior: Retrieve only trusted market content; if unavailable, use fallback and offer specialist help.
+objection_behavior: Acknowledge, clarify premium/coverage/policy/timing, then answer only from trusted content.
+closing: Salamat po. Kumpleto na ang initial details for preliminary review; this is not an approval or guarantee.
+fallback: Wala akong verified answer for that right now. I can record your question and arrange help from an insurance specialist.
+escalation: Sige po, I will arrange a specialist callback and keep the details you shared.

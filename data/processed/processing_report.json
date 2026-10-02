@@ -1,0 +1,18 @@
+{
+  "sources_processed": 6,
+  "sources_failed": 0,
+  "records_created": 17,
+  "chunks_created": 17,
+  "pii_records_flagged": 1,
+  "duplicates_found": 3,
+  "near_duplicates_found": 1,
+  "errors": [],
+  "vectors_indexed": 17,
+  "embeddings_generated": 17,
+  "near_duplicate_review": [
+    {
+      "new_chunk": "SRC-004-R003-C001",
+      "decision": "REVIEW_REQUIRED"
+    }
+  ]
+}

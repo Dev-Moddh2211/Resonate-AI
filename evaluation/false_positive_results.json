@@ -1,0 +1,7 @@
+[
+ {"scenario":"expansion mention","signal":"missed_opportunity","expected":"nudge","actual":"nudge","confidence":0.83,"verdict":"true_positive","reason":"customer explicitly said another location"},
+ {"scenario":"clear cooperative answer","signal":"rising_frustration","expected":"no nudge","actual":"no nudge","confidence":0.0,"verdict":"true_negative","reason":"no frustration evidence"},
+ {"scenario":"repeated frustration","signal":"rising_frustration","expected":"one nudge","actual":"one nudge","confidence":0.83,"verdict":"true_positive_suppressed_duplicates","reason":"cooldown and deduplication"},
+ {"scenario":"noisy ambiguous speech","signal":"rising_frustration","expected":"no nudge","actual":"no nudge","confidence":0.0,"verdict":"true_negative","reason":"no exact evidence phrase and speaker-aware filtering"},
+ {"scenario":"guaranteed approval claim","signal":"compliance_gap","expected":"high-priority nudge","actual":"high-priority nudge","confidence":0.93,"verdict":"true_positive","reason":"agent-only compliance phrase"}
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "test_id": "T1",
+    "user_question": "What is the working capital loan for?",
+    "expected_source": "SRC-001",
+    "expected_category": "product",
+    "retrieved_source": "SRC-001",
+    "retrieved_record": "SRC-001-R002",
+    "score": 0.2941,
+    "verdict": "correct",
+    "relevance_explanation": "Top lexical overlap with normalized query; score is not a probability."
+  },
+  {
+    "test_id": "T2",
+    "user_question": "What information is collected for preliminary review?",
+    "expected_source": "SRC-002",
+    "expected_category": "qualification",
+    "retrieved_source": "SRC-002",
+    "retrieved_record": "SRC-002-R002",
+    "score": 0.5842,
+    "verdict": "correct",
+    "relevance_explanation": "Top lexical overlap with normalized query; score is not a probability."
+  },
+  {
+    "test_id": "T3",
+    "user_question": "What documents are needed?",
+    "expected_source": "SRC-003",
+    "expected_category": "faq",
+    "retrieved_source": "SRC-003",
+    "retrieved_record": "SRC-003-R002",
+    "score": 0.4544,
+    "verdict": "correct",
+    "relevance_explanation": "Top lexical overlap with normalized query; score is not a probability."
+  },
+  {
+    "test_id": "T4",
+    "user_question": "Does applying guarantee approval?",
+    "expected_source": "SRC-003",
+    "expected_category": "faq",
+    "retrieved_source": "SRC-003",
+    "retrieved_record": "SRC-003-R003",
+    "score": 0.72,
+    "verdict": "correct",
+    "relevance_explanation": "Top lexical overlap with normalized query; score is not a probability."
+  },
+  {
+    "test_id": "T5",
+    "user_question": "I need guaranteed approval",
+    "expected_source": "SRC-005",
+    "expected_category": "objection",
+    "retrieved_source": "SRC-005",
+    "retrieved_record": "SRC-005-R003",
+    "score": 0.5903,
+    "verdict": "correct",
+    "relevance_explanation": "Top lexical overlap with normalized query; score is not a probability."
+  },
+  {
+    "test_id": "T6",
+    "user_question": "What is the weather today?",
+    "expected_source": null,
+    "retrieved_source": null,
+    "retrieved_record": null,
+    "score": null,
+    "verdict": "correct",
+    "relevance_explanation": "Top lexical overlap with normalized query; score is not a probability."
+  },
+  {
+    "test_id": "T7",
+    "user_question": "loan amount requested funding amount",
+    "expected_source": "SRC-001",
+    "retrieved_source": "SRC-002",
+    "retrieved_record": "SRC-002-R002",
+    "score": 0.2732,
+    "verdict": "incorrect",
+    "relevance_explanation": "Top lexical overlap with normalized query; score is not a probability."
+  },
+  {
+    "test_id": "T8",
+    "user_question": "Please, can you tell me briefly what papers I should bring for an application?",
+    "expected_source": "SRC-003",
+    "retrieved_source": null,
+    "retrieved_record": null,
+    "score": null,
+    "verdict": "partially_correct",
+    "relevance_explanation": "Top lexical overlap with normalized query; score is not a probability."
+  }
+]

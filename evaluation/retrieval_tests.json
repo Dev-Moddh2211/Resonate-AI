@@ -1,0 +1,10 @@
+[
+ {"test_id":"T1","user_question":"What is the working capital loan for?","expected_source":"SRC-001","expected_category":"product"},
+ {"test_id":"T2","user_question":"What information is collected for preliminary review?","expected_source":"SRC-002","expected_category":"qualification"},
+ {"test_id":"T3","user_question":"What documents are needed?","expected_source":"SRC-003","expected_category":"faq"},
+ {"test_id":"T4","user_question":"Does applying guarantee approval?","expected_source":"SRC-003","expected_category":"faq"},
+ {"test_id":"T5","user_question":"I need guaranteed approval","expected_source":"SRC-005","expected_category":"objection"},
+ {"test_id":"T6","user_question":"What is the weather today?","expected_source":null},
+ {"test_id":"T7","user_question":"loan amount requested funding amount","expected_source":"SRC-001"},
+ {"test_id":"T8","user_question":"Please, can you tell me briefly what papers I should bring for an application?","expected_source":"SRC-003"}
+]

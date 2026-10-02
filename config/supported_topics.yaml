@@ -1,0 +1,13 @@
+version: 1
+note: "Topic categories only; answers come from the future trusted knowledge base."
+topics:
+  - loan_products
+  - qualification_requirements
+  - required_documents
+  - loan_purpose
+  - repayment_information
+  - application_process
+  - general_faq
+  - callback_process
+  - qualification_questions
+  - documented_objections

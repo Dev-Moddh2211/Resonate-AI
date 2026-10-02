@@ -1,0 +1,5 @@
+source: synthetic_prototype
+objections:
+  - {intent: premium_is_too_high, customer: "Medyo mataas ang premium; may mas affordable bang option?", response_behavior: "acknowledge; retrieve approved information or escalate; never quote a product", terms: [premium, coverage]}
+  - {intent: distrust_bank_referral, customer: "Bank referral lang ba ito? Ayoko ng surprise charges.", response_behavior: "clarify channel; do not claim bank endorsement or fee policy", terms: [bank_referral, policy]}
+  - {intent: coverage_lapse, customer: "Na-lapse yung policy ko; covered pa ba ako?", response_behavior: "do not determine status; record and escalate for policy-specific help", terms: [lapse, coverage, policy]}

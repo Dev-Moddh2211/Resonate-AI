@@ -1,0 +1,6 @@
+[
+  {"call_id":"audit-compliance-001","scenario":"skipped disclosure / risky approval statement","audio":null,"duration":2.0,"trigger_time":1.0,"signal":"compliance_gap","confidence":0.93,"nudge":"Do not imply guaranteed approval.","nudge_time":1.0,"call_end_time":2.0,"occurred_before_call_end":true,"result":"verified on transcript replay; not audio ASR"},
+  {"call_id":"audit-opportunity-001","scenario":"missed cross-sell opportunity","audio":null,"duration":2.0,"trigger_time":1.0,"signal":"missed_opportunity","confidence":0.83,"nudge":"Ask whether they also need financing for the expansion.","nudge_time":1.0,"call_end_time":2.0,"occurred_before_call_end":true,"result":"verified on transcript replay; not audio ASR"},
+  {"call_id":"audit-frustration-001","scenario":"rising frustration","audio":null,"duration":2.0,"trigger_time":1.0,"signal":"rising_frustration","confidence":0.83,"nudge":"Acknowledge the concern before continuing.","nudge_time":1.0,"call_end_time":2.0,"occurred_before_call_end":true,"result":"verified on transcript replay; not audio ASR"},
+  {"call_id":"audit-noise-001","scenario":"noisy / ambiguous call","audio":null,"duration":1.0,"trigger_time":1.0,"signal":null,"confidence":0.0,"nudge":null,"nudge_time":null,"call_end_time":1.0,"occurred_before_call_end":false,"result":"no unnecessary nudge"}
+]

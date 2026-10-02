@@ -1,0 +1,23 @@
+version: 1
+status: prototype_assumption
+warning: "Replace criteria with business-approved lender rules before production."
+states: [incomplete, needs_clarification, preliminary_qualified, preliminary_not_qualified, human_review, escalated]
+required_for_preliminary_review: [full_name, business_name, business_type, loan_purpose, requested_loan_amount, contact_number]
+rules:
+  - id: missing_required_information
+    if: required_field_missing
+    result: incomplete
+  - id: ambiguous_value
+    if: important_value_uncertain_or_unparseable
+    result: needs_clarification
+  - id: conflicting_information
+    if: unresolved_important_conflict
+    result: human_review
+  - id: reviewable_profile
+    if: required_fields_present_and_consistent
+    result: preliminary_qualified
+    note: "Suitable for further discussion only; not approval."
+  - id: approved_policy_exception
+    if: future_business_rule_marks_ineligible
+    result: preliminary_not_qualified
+evaluation_order: [missing_required_information, ambiguous_value, conflicting_information, approved_policy_exception, reviewable_profile]

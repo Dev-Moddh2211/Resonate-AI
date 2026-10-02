@@ -1,0 +1,8 @@
+version: 1
+topics:
+  - no_trusted_business_source
+  - guaranteed_approval_or_final_decision
+  - application_manipulation_or_fraud
+  - personalized_financial_or_legal_advice
+  - unrelated_requests
+  - sensitive_matters_outside_scope

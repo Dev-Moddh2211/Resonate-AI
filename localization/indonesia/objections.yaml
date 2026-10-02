@@ -1,0 +1,5 @@
+source: synthetic_prototype
+objections:
+  - {intent: installment_unaffordable, customer: "Cicilannya lagi berat, bisa ubah tenor nggak?", response_behavior: "acknowledge and retrieve; never promise restructuring", terms: [cicilan, tenor]}
+  - {intent: late_fee_dispute, customer: "Saya bayar kemarin, kok masih ada denda?", response_behavior: "do not adjudicate; record date and escalate for account verification", terms: [denda, jatuh_tempo]}
+  - {intent: down_payment_confusion, customer: "DP-nya berapa? Ini finance atau loan biasa?", response_behavior: "explain only approved product content; clarify product", terms: [DP, pembiayaan]}

@@ -1,0 +1,5 @@
+version: 1
+canonical_terms:
+  requested_loan_amount: [loan amount, requested amount, funding amount, amount required]
+  business_registration_document: [business registration, registration certificate]
+  preliminary_review: [initial review, first review, qualification check]

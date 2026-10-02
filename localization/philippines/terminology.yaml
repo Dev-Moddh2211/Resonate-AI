@@ -1,0 +1,11 @@
+market: Philippines
+sector: life_insurance
+source: synthetic_prototype
+terms:
+  premium: {canonical: premium_payment, preferred: premium, english: premium, variants: [hulog sa insurance]}
+  policy: {canonical: insurance_contract, preferred: policy, english: policy, variants: [insurance policy]}
+  beneficiary: {canonical: named_recipient, preferred: beneficiary, english: beneficiary, variants: [makikinabang]}
+  rider: {canonical: optional_add_on, preferred: rider, english: rider, variants: [dagdag na benefit]}
+  lapse: {canonical: coverage_status_change, preferred: lapse, english: lapse, variants: [mawala ang active status]}
+  coverage: {canonical: insured_protection, preferred: coverage, english: coverage, variants: [sakop]}
+  bank_referral: {canonical: referral_channel, preferred: bank referral, english: bank referral, variants: [referral galing sa bangko]}

@@ -1,0 +1,24 @@
+version: 1
+status: prototype
+purpose: "Shared safety and conversation rules; not lender policy."
+missing_information:
+  behavior: ask_one_clear_question_at_a_time
+  max_retries_before_human_review: 2
+  never_infer: [identity, revenue, loan_amount, approval]
+conflicting_information:
+  behavior: identify_conflict_and_confirm
+  preserve_original_value: true
+  unresolved_state: human_review
+human_request:
+  behavior: acknowledge_and_escalate
+  preserve_context: true
+unsupported_information:
+  behavior: state_unavailable_and_offer_human_help
+  prohibit_guessing: true
+system_error:
+  behavior: graceful_fallback_and_escalation
+  expose_technical_details: false
+authorization:
+  may_collect: preliminary_information
+  may_do: [summarize, clarify, provide_trusted_general_information]
+  may_not_do: [approve_loan, deny_loan, quote_unverified_terms, give_personalized_financial_or_legal_advice]

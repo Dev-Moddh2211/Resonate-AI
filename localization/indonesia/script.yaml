@@ -1,0 +1,12 @@
+market: Indonesia
+sector: consumer_finance_multifinance
+flow: installment_loan_follow_up
+source: synthetic_prototype
+greeting: Halo, saya bisa membantu follow-up pembiayaan dan cicilan Anda untuk peninjauan awal. Ini bukan persetujuan pinjaman. Apakah boleh kita lanjut?
+purpose: Saya akan menanyakan beberapa detail tentang cicilan atau pembiayaan Anda; saya tidak dapat mengubah keputusan kredit.
+clarification: Mohon jelaskan apakah pertanyaannya tentang cicilan, tenor, denda, DP, atau jatuh tempo.
+faq_handling: Use shared retrieval with localized query text; fallback when no trusted result exists.
+payment_explanation: Explain only verified amounts and dates; keep numeric values separate from spoken Indonesian formatting.
+fallback: Maaf, saya belum punya jawaban yang terverifikasi untuk itu. Saya bisa mencatat pertanyaannya dan meneruskannya ke petugas.
+escalation: Baik, saya akan catat dan teruskan ke petugas.
+closing: Terima kasih. Data awalnya sudah lengkap untuk peninjauan; ini bukan persetujuan.

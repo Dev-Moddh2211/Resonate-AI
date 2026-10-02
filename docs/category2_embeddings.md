@@ -1,0 +1,5 @@
+# Embeddings, vector index, and hybrid ranking
+
+`knowledge_base/embeddings.py` exposes `EmbeddingProvider` with `embed_documents` and `embed_query`. The default `local-hash-embedding-v1` creates normalized 256-dimensional vectors from hashed word tokens and character trigrams. It is deterministic, offline, inexpensive, and has no credential or network failure mode. It is not a pretrained language model and should not be treated as state-of-the-art; a sentence-transformer or hosted provider can replace it behind the same interface when corpus quality and scale justify that cost.
+
+`vector_index.py` stores each embedding with chunk ID, record ID, source ID, and complete metadata, and supports cosine top-k search with category filtering. `retrieval.py` retains lexical overlap and combines lexical relevance (50%), semantic cosine signal (35%), heading/category signals (15% plus a small explicit category boost). Scores rank candidates; they are not probabilities. The lexical path remains useful for exact product names, identifiers, and transparent debugging.

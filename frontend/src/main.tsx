@@ -1,0 +1,15 @@
+import React, {useRef, useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import './style.css';
+
+type Message={who:'YOU'|'ASSISTANT'; text:string};
+const API_BASE_URL=(import.meta.env.VITE_API_BASE_URL||'http://localhost:8080').replace(/\/$/,'');
+const api=async(path:string, body:unknown)=>{const r=await fetch(`${API_BASE_URL}${path}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw Error();return r.json()};
+function App(){const [status,setStatus]=useState('READY'),[mic,setMic]=useState('Not started'),[callId,setCallId]=useState<string|null>(null),[messages,setMessages]=useState<Message[]>([]),stream=useRef<MediaStream|null>(null),recognition=useRef<any>(null);
+const add=(who:Message['who'],text:string)=>setMessages(m=>[...m,{who,text}]);
+const listen=()=>{if(!recognition.current||!callId)return;setStatus('LISTENING');try{recognition.current.start()}catch{}};
+const speak=(text:string)=>{add('ASSISTANT',text);setStatus('SPEAKING');if(!('speechSynthesis'in window)){listen();return}const u=new SpeechSynthesisUtterance(text);u.onend=listen;speechSynthesis.speak(u)};
+const start=async()=>{setStatus('MICROPHONE ACCESS');try{stream.current=await navigator.mediaDevices.getUserMedia({audio:true});setMic('Granted');setStatus('STARTING');const r=await api('/api/conversation/start',{});setCallId(r.call_id);add('ASSISTANT',r.response);const R=(window as any).SpeechRecognition||(window as any).webkitSpeechRecognition;if(!R){setStatus('ERROR');add('ASSISTANT','Speech recognition is not supported in this browser. Use the testing fallback.');return}const rec=new R();rec.lang='en-IN';rec.interimResults=false;rec.onresult=(e:any)=>{const text=e.results[0][0].transcript;add('YOU',text);setStatus('THINKING');api('/api/conversation/turn',{call_id:r.call_id,message:text}).then(x=>speak(x.response)).catch(()=>setStatus('ERROR'))};rec.onerror=()=>setStatus('ERROR');recognition.current=rec;speak(r.response)}catch{setMic('Denied');setStatus('ERROR')}};
+const end=async()=>{if(recognition.current)recognition.current.stop();if('speechSynthesis'in window)speechSynthesis.cancel();if(stream.current)stream.current.getTracks().forEach(t=>t.stop());if(callId)await api('/api/conversation/end',{call_id:callId}).catch(()=>{});setCallId(null);setMic('Released');setStatus('ENDED')};
+return <main><header><h1>Business Loan Voice Assistant</h1><p>Preliminary qualification only — not loan approval.</p></header><section className="card"><div className="status"><span>●</span><strong>{status}</strong><small>Microphone: {mic}</small></div><div className="orb">{status==='LISTENING'?'●':status==='SPEAKING'?'🔊':'🎙️'}</div><button onClick={start} disabled={!!callId||status==='STARTING'||status==='MICROPHONE ACCESS'}>Start Call</button><button onClick={end} disabled={!callId}>End Call</button><div className="transcript">{messages.map((m,i)=><article key={i} className={m.who.toLowerCase()}><b>{m.who}</b><div>{m.text}</div></article>)}</div></section></main>}
+createRoot(document.getElementById('root')!).render(<App/>);

@@ -1,0 +1,11 @@
+market: Indonesia
+sector: consumer_finance_multifinance
+source: synthetic_prototype
+terms:
+  cicilan: {canonical: installment, preferred: cicilan, english: installment, variants: [angsuran]}
+  tenor: {canonical: repayment_duration, preferred: tenor, english: tenor, variants: [jangka waktu]}
+  denda: {canonical: late_fee, preferred: denda, english: penalty, variants: [biaya keterlambatan]}
+  DP: {canonical: down_payment, preferred: DP, english: down payment, variants: [uang muka]}
+  jatuh_tempo: {canonical: due_date, preferred: jatuh tempo, english: due date, variants: [tanggal pembayaran]}
+  angsuran: {canonical: installment, preferred: angsuran, english: installment, variants: [cicilan]}
+  pembiayaan: {canonical: financing, preferred: pembiayaan, english: financing, variants: [finance]}
