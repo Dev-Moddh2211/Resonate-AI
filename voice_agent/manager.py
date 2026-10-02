@@ -11,6 +11,12 @@ from .localization import detect_language, load_market, localized_text
 
 HUMAN = re.compile(r"\b(human|person|specialist|agent|representative|petugas|orang|manusia|call me back|bicara dengan)\b", re.I)
 UNAUTHORIZED = re.compile(r"\b(approve|approval|guarantee|guaranteed|underwrite|legal advice|financial advice)\b", re.I)
+OBJECTION = re.compile(
+    r"\b(?:not sure|hesitat(?:e|ion)|concern(?:ed)?|worried|afford|too expensive|"
+    r"don't want|do not want|rather not|uncomfortable|why should i|is this safe|"
+    r"interest|rate|eligible|eligibility|qualif(?:y|ied|ication)|policy|"
+    r"speak to (?:a )?(?:human|person|specialist)|need help)\b", re.I
+)
 
 
 class ConversationManager:
@@ -39,6 +45,13 @@ class ConversationManager:
 
         missing_before = evaluate(state).get("missing", [])
         values = extract_values(message, missing_before[0] if missing_before else None)
+        # Questions and objections raised while collecting a field must not be
+        # interpreted as an answer to that field. Route them through the same
+        # grounded KB path, then repeat the still-missing qualification prompt.
+        if (missing_before and state.current_stage != "GREETING" and not values
+                and (self._looks_like_question(message) or OBJECTION.search(message))):
+            return self._knowledge_answer(state, message, resume_field=missing_before[0])
+
         self._merge(state, values)
         if values:
             state.qualification_data = evaluate(state)
@@ -71,20 +84,34 @@ class ConversationManager:
     def _looks_like_question(self, message):
         return "?" in message or any(w in message.casefold() for w in ("what", "how", "can i", "do i", "documents", "repay", "process", "interest", "rate", "need"))
 
-    def _knowledge_answer(self, state, message):
+    def _knowledge_answer(self, state, message, resume_field=None):
         # Retrieval scores alone can be inflated by generic words such as
         # "policy". Require a business-domain signal before speaking.
         domain_terms = ("loan", "borrow", "fund", "business", "document", "repay", "payment", "qualification", "eligible", "application", "rate", "interest", "approval")
-        if not any(term in message.casefold() for term in domain_terms):
-            return self._escalate(state, "unsupported_question", localized_text(state.market, "fallback", state.detected_register))
+        if not any(term in message.casefold() for term in domain_terms) and (not OBJECTION.search(message) or resume_field is None):
+            if resume_field is None:
+                return self._escalate(state, "unsupported_question", localized_text(state.market, "fallback", state.detected_register))
+            return self._resume_qualification(state, localized_text(state.market, "fallback", state.detected_register), resume_field)
         result = self.retriever.search(message, top_k=3)
         state.retrieved_context = result.get("results", [])
         state.last_sources = [{k: r.get(k) for k in ("source", "source_id", "chunk_id", "confidence", "version", "page")} for r in state.retrieved_context]
         state.retrieval_confidence = state.retrieved_context[0]["confidence"] if state.retrieved_context else None
         if result["status"] == "no_trusted_result" or state.retrieval_confidence == "low":
-            return self._escalate(state, "unsupported_question", localized_text(state.market, "fallback", state.detected_register))
+            if resume_field is None:
+                return self._escalate(state, "unsupported_question", localized_text(state.market, "fallback", state.detected_register))
+            return self._resume_qualification(state, localized_text(state.market, "fallback", state.detected_register), resume_field)
         answer = state.retrieved_context[0]["content"].split("\n")[0].strip()
-        return self._result(state, answer)
+        return self._resume_qualification(state, answer, resume_field)
+
+    def _resume_qualification(self, state, response, field=None):
+        """Answer a side question without consuming or changing its field."""
+        state.qualification_data = evaluate(state)
+        field = field or state.qualification_data.get("missing", [None])[0]
+        prompts = {"full_name": "What is your full name?", "business_name": "What is your business name?", "business_type": "What type of business do you run?", "loan_purpose": "What would you mainly use the funding for?", "requested_loan_amount": "Roughly how much are you looking to borrow?", "contact_number": "What is the best contact number for a callback?"}
+        state.current_stage = "BASIC_CUSTOMER_DETAILS" if field in ("full_name", "contact_number") else "BUSINESS_DETAILS" if field in ("business_name", "business_type") else "LOAN_REQUIREMENT"
+        if field:
+            response = f"{response}\n\n{prompts.get(field, f'Could you provide your {field.replace("_", " ")}')}"
+        return self._result(state, response)
 
     def _escalate(self, state, reason, text):
         state.escalation_required, state.escalation_reason, state.current_stage = True, reason, "ESCALATED"

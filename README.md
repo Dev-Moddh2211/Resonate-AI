@@ -1,12 +1,12 @@
 # AI Business Loan Qualification Assistant
 
-Category 1 foundation for a preliminary business-loan qualification assistant. It helps a small-business owner share basic information, receive only trusted general information from a future knowledge base, and get a structured human handoff. It never approves or denies a loan, promises approval, or invents terms.
+Category 1 foundation for a preliminary business-loan qualification assistant. It helps a small-business owner share basic information, receive trusted general information from the Q2 knowledge base when retrieval is confident, and get a structured human handoff. It never approves or denies a loan, promises approval, or invents terms.
 
 ## Status
 
 Category 1 = COMPLETE. Category 2 = IMPLEMENTED. Category 3 = IMPLEMENTED as a provider-neutral callable webhook prototype. Category 4 = IMPLEMENTED as localized prototypes. Category 5 = PARTIAL: incremental pre-labelled transcript replay, signal detection, nudge controls, polling boundary, and tests; streaming ASR, audio replay, and dashboard delivery remain unimplemented.
 
-Category 2 provides a local, traceable knowledge-base pipeline: synthetic-prototype source inventory, format-aware extraction, cleaning, PII redaction, section-aware chunking, metadata indexing, retrieval, citations, and evaluation cases. Run `python -m knowledge_base.cli "What documents are needed?"` or `python -m unittest discover -s tests -p '*category2_test.py'`. The retrieval interface is designed for future Category 3 integration; no voice agent is connected.
+Category 2 provides a local, traceable knowledge-base pipeline: synthetic-prototype source inventory, format-aware extraction, cleaning, PII redaction, section-aware chunking, metadata indexing, retrieval, citations, and evaluation cases. Q1 is connected to the Q2 knowledge base at runtime: `ConversationManager` invokes the Q2 retriever for knowledge-grounded questions and preserves source metadata/citations. Deterministic qualification rules handle structured fields; when no trusted KB result exists, Q1 uses safe fallback or escalation rather than inventing information. Run `python -m knowledge_base.cli "What documents are needed?"` or `python -m unittest discover -s tests -p '*category2_test.py'`.
 
 ## Structure
 
@@ -18,9 +18,9 @@ Install backend dependencies with `python -m pip install -r requirements.txt`. F
 
 ## Deployment
 
-The frontend is a static Vite site for Cloudflare Pages. Set the Pages build command to `npm run build`, the build directory to `dist`, and `VITE_API_BASE_URL` to the public Render service URL, for example `https://loan-assistant-api.onrender.com`.
+The frontend is a static React/Vite site deployed to Vercel. Set the project root to `frontend`, build command to `npm run build`, output directory to `dist`, and `VITE_API_BASE_URL` to the public Render service URL, for example `https://loan-assistant-api.onrender.com`.
 
-The backend is a Render Web Service. Install with `pip install -r requirements.txt` and use the start command `python -m voice_agent.http_server`. The server binds to `0.0.0.0` and reads Render's `PORT` (falling back to `8080` locally). Set `FRONTEND_ORIGIN` to the Cloudflare Pages origin; comma-separated origins are supported for local plus deployed testing. The default ASR configuration is `base.en`, CPU, and `int8`, controlled by `ASR_MODEL`, `ASR_DEVICE`, and `ASR_COMPUTE_TYPE`. Faster-Whisper may download/load the model during startup or first realtime use; downloaded model files are not committed and persistent local storage must not be assumed on Render Free.
+The backend is a Render Web Service. Install with `pip install -r requirements.txt` and use the start command `python -m voice_agent.http_server`. The server binds to `0.0.0.0` and reads Render's `PORT` (falling back to `8080` locally). Set `FRONTEND_ORIGIN` to the Vercel origin; comma-separated origins are supported for local plus deployed testing. Required backend variables are `ASR_MODEL`, `ASR_DEVICE`, `ASR_COMPUTE_TYPE`, and `FRONTEND_ORIGIN`. Faster-Whisper may download/load the model during startup or first realtime use; downloaded model files are not committed and persistent local storage must not be assumed on Render Free.
 
 The backend exposes `GET /health`, the existing `/api/*` endpoints, and `/realtime/events`. Browser microphone access requires user permission and a secure context (HTTPS in deployment; localhost is allowed for local development). No API secrets belong in `VITE_*` variables.
 

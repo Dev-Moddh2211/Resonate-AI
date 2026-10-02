@@ -12,6 +12,7 @@ venv/
 recordings/
 transcripts/
 *.wav
+!evidence/category5/audio/*.wav
 *.mp3
 *.m4a
 .DS_Store

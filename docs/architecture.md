@@ -13,7 +13,7 @@ Future Category 5: live audio → streaming ASR → signals → nudge engine
 
 ## Current versus planned
 
-**Implemented now (Category 1):** documented scope, YAML rule/configuration boundaries, state/failure design, contracts, and test/evidence plans. **Planned later:** Category 2 ingestion/retrieval; Category 3 voice, ASR/TTS, and conversation runtime; Category 4 localization; Category 5 real-time intelligence. No planned component is functional in this repository.
+**Implemented now (Category 1):** documented scope, YAML rule/configuration boundaries, deterministic qualification state/failure design, the Q1 conversation runtime, and its Q2 knowledge-base retrieval integration. **Planned later:** production source/provider expansion, Category 3 voice/ASR/TTS providers, Category 4 localization, and Category 5 real-time intelligence. The local Q1 runtime uses the Q2 retriever for knowledge-grounded questions, preserves source metadata, and safely falls back when no trusted result exists.
 
 Voice handles audio, state management owns flow, rules own deterministic decisions, retrieval owns trusted context, generation turns approved context into language, validation blocks unsafe claims, and external actions are adapters requiring authorization.
 

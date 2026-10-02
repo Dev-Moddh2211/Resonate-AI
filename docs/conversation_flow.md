@@ -8,7 +8,7 @@
 | `BUSINESS_DETAILS` | Collect business context | complete | conflict → human_review |
 | `LOAN_REQUIREMENT` | Collect amount and purpose | complete | ambiguity → clarification |
 | `QUALIFICATION` | Run deterministic rules | explicit preliminary state | missing/conflict → incomplete/human_review |
-| `QUESTIONS_OBJECTIONS` | Retrieve future KB answer or fallback | resolved/no question | unsupported → escalation |
+| `QUESTIONS_OBJECTIONS` | Retrieve Q2 KB answer or use safe fallback | resolved/no question | unsupported → escalation |
 | `NEXT_STEP` | Explain state and path | accepted next step | human request → escalated |
 | `CLOSING` | Summarize and end | ended | system error → escalated |
 

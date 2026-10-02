@@ -2,7 +2,7 @@
 
 ## Target configuration
 
-- Frontend: React/Vite/TypeScript static build on Cloudflare Pages.
+- Frontend: React/Vite/TypeScript static build on Vercel.
 - Backend: Python `voice_agent.http_server` on a Render Web Service.
 - Backend start command: `python -m voice_agent.http_server`.
 - Backend bind: `0.0.0.0`; port: `int(os.getenv("PORT", "8080"))`.
@@ -12,7 +12,7 @@
 Backend:
 
 - `PORT` — supplied by Render.
-- `FRONTEND_ORIGIN` — the Cloudflare Pages origin, such as `https://loan-assistant.pages.dev`; local default is `http://localhost:5173`.
+- `FRONTEND_ORIGIN` — the Vercel origin, such as `https://loan-assistant.vercel.app`; local default is `http://localhost:5173`.
 - `ASR_MODEL` — defaults to `base.en`.
 - `ASR_DEVICE` — defaults to `cpu`.
 - `ASR_COMPUTE_TYPE` — defaults to `int8`.
@@ -29,13 +29,13 @@ The backend provides `GET /health` without initializing ASR. Browser API request
 
 ## Deployment boundary
 
-The Render service is the Python backend/API. Its `GET /` handler serves the legacy `web/index.html` fallback, while `/api/*`, `/voice/*`, and `/realtime/*` are backend endpoints. The React/Vite/TypeScript frontend is intended to be built and deployed separately to Cloudflare Pages.
+The Render service is the Python backend/API. Its `GET /` handler serves the legacy `web/index.html` fallback, while `/api/*`, `/voice/*`, and `/realtime/*` are backend endpoints. The React/Vite/TypeScript frontend is intended to be built and deployed separately to Vercel.
 
 The repository contains only synthetic demo WAV fixtures under `evidence/category5/audio/`; recordings, model files, credentials, and customer information are excluded by `.gitignore` and must not be added.
 
 ## Provider settings
 
-Cloudflare Pages:
+Vercel:
 
 1. Root directory: `frontend`.
 2. Build command: `npm run build`.
