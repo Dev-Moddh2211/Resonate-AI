@@ -27,6 +27,10 @@ Do not put secrets in `VITE_*` variables. The Faster-Whisper model is downloaded
 
 The backend provides `GET /health` without initializing ASR. Browser API requests use `VITE_API_BASE_URL`; the backend permits configured origins and handles CORS preflight. Browser microphone access requires permission and HTTPS (secure context), with localhost supported during development.
 
+## Deployment boundary
+
+The Render service is the Python backend/API. Its `GET /` handler serves the legacy `web/index.html` fallback, while `/api/*`, `/voice/*`, and `/realtime/*` are backend endpoints. The React/Vite/TypeScript frontend is intended to be built and deployed separately to Cloudflare Pages.
+
 The repository contains only synthetic demo WAV fixtures under `evidence/category5/audio/`; recordings, model files, credentials, and customer information are excluded by `.gitignore` and must not be added.
 
 ## Provider settings

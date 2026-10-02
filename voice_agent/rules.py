@@ -13,7 +13,19 @@ def load_rules() -> dict[str, Any]:
     text = (ROOT / "config/qualification_rules.yaml").read_text()
     line = next(x for x in text.splitlines() if x.startswith("required_for_preliminary_review:"))
     fields = re.findall(r"[a-z_]+", line.split(":", 1)[1])
-    return {"required_for_preliminary_review": fields}
+    terms = {}
+    in_terms = False
+    for raw_line in text.splitlines():
+        if raw_line == "loan_purpose_terms:":
+            in_terms = True
+            continue
+        if in_terms and raw_line and not raw_line.startswith("  "):
+            break
+        if in_terms:
+            match = re.match(r"\s{2}([a-z_]+):\s*\[(.*)\]", raw_line)
+            if match:
+                terms[match.group(1)] = [x.strip().strip("\"'") for x in match.group(2).split(",")]
+    return {"required_for_preliminary_review": fields, "loan_purpose_terms": terms}
 
 
 def extract_values(text: str, requested_field: str | None = None) -> dict[str, Any]:
@@ -38,10 +50,11 @@ def extract_values(text: str, requested_field: str | None = None) -> dict[str, A
         out["business_name"] = cleaned
     if requested_field == "business_type" and not out and len(words) <= 3 and re.fullmatch(r"[A-Za-z -]+", cleaned):
         out["business_type"] = cleaned.casefold().removesuffix(" business").strip()
-    if requested_field == "loan_purpose" and not out and len(words) <= 4:
-        purpose = next((x for x in ("equipment", "inventory", "working capital", "expansion") if x in t), None)
-        if purpose:
-            out["loan_purpose"] = purpose
+    purpose_terms = load_rules()["loan_purpose_terms"]
+    purpose = next((purpose for purpose, terms in purpose_terms.items()
+                    if any(term in t for term in terms)), None)
+    if purpose:
+        out["loan_purpose"] = purpose
     years = re.search(r"(?:about|around|nearly|for)\s+(\d+(?:\.\d+)?)\s+years?", t)
     if years:
         out["years_in_business"] = float(years.group(1))
@@ -73,8 +86,6 @@ def extract_values(text: str, requested_field: str | None = None) -> dict[str, A
             value = float(standalone_amount.group(1).replace(",", ""))
             value *= {"lakh":100000,"lakhs":100000,"lacs":100000,"lac":100000,"crore":10000000,"crores":10000000}.get(standalone_amount.group(2) or "", 1)
             out["requested_loan_amount"] = int(value)
-    if any(x in t for x in ("equipment", "inventory", "working capital", "expansion")):
-        out["loan_purpose"] = next(x for x in ("equipment", "inventory", "working capital", "expansion") if x in t)
     return out
 
 

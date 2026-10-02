@@ -112,3 +112,35 @@ class Category3Tests(unittest.TestCase):
                  ("requested_loan_amount", "15 lakh", 1500000), ("loan_purpose", "Equipment", "equipment")]
         for field, text, expected in cases:
             self.assertEqual(extract_values(text, field)[field], expected)
+
+    def test_http_browser_style_funding_purpose_advances_stage(self):
+        from voice_agent.http_server import calls, process_request
+        calls.clear()
+        process_request("/voice/start", {"CallSid": ["q1-browser"]})
+        process_request("/voice/turn", {"CallSid": ["q1-browser"], "Speech": ["Madhura stationery"]})
+        process_request("/voice/turn", {"CallSid": ["q1-browser"], "Speech": ["Stationery shop"]})
+        response, state = process_request("/voice/turn", {"CallSid": ["q1-browser"], "Speech": ["To grow my business"]})
+        self.assertEqual(state.loan_requirement["loan_purpose"], "expansion")
+        self.assertNotIn("funding for", response)
+
+    def test_http_browser_style_natural_and_alternate_purposes(self):
+        from voice_agent.http_server import calls, process_request
+        for answer, expected in (("To grow my business for more sales and more profit", "expansion"),
+                                 ("I will use it for inventory", "inventory"),
+                                 ("I need money to expand my shop", "expansion"),
+                                 ("working capital", "working_capital")):
+            calls.clear()
+            process_request("/voice/start", {"CallSid": ["purpose-test"]})
+            _, state = process_request("/voice/turn", {"CallSid": ["purpose-test"], "Speech": [answer]})
+            self.assertEqual(state.loan_requirement["loan_purpose"], expected)
+
+    def test_http_repeated_answer_and_conflicting_correction(self):
+        from voice_agent.http_server import calls, process_request
+        calls.clear()
+        process_request("/voice/start", {"CallSid": ["repeat-test"]})
+        process_request("/voice/turn", {"CallSid": ["repeat-test"], "Speech": ["equipment"]})
+        process_request("/voice/turn", {"CallSid": ["repeat-test"], "Speech": ["equipment"]})
+        _, state = process_request("/voice/turn", {"CallSid": ["repeat-test"], "Speech": ["inventory"]})
+        self.assertEqual(state.loan_requirement["loan_purpose"], "equipment")
+        self.assertEqual(len(state.conflicts), 1)
+        self.assertEqual(state.qualification_data["state"], "human_review")
